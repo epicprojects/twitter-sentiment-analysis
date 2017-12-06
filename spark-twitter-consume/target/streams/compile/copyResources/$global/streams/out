@@ -1,0 +1,2 @@
+[0m[[0mdebug[0m] [0mCopy resource mappings: [0m
+[0m[[0mdebug[0m] [0m	(/home/osboxes/Downloads/hdinsight-kafka-spark-master/spark-twitter-consume/src/main/resources/NLTK_English_Stopwords_Corpus.txt,/home/osboxes/Downloads/hdinsight-kafka-spark-master/spark-twitter-consume/target/scala-2.11/classes/NLTK_English_Stopwords_Corpus.txt)[0m

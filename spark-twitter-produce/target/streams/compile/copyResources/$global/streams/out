@@ -1,0 +1,3 @@
+[0m[[0mdebug[0m] [0mCopy resource mappings: [0m
+[0m[[0mdebug[0m] [0m	(/home/osboxes/Downloads/hdinsight-kafka-spark-master/spark-twitter-produce/src/main/resources/avro,/home/osboxes/Downloads/hdinsight-kafka-spark-master/spark-twitter-produce/target/scala-2.11/classes/avro)[0m
+[0m[[0mdebug[0m] [0m	(/home/osboxes/Downloads/hdinsight-kafka-spark-master/spark-twitter-produce/src/main/resources/avro/twitter.avsc,/home/osboxes/Downloads/hdinsight-kafka-spark-master/spark-twitter-produce/target/scala-2.11/classes/avro/twitter.avsc)[0m
