@@ -7,10 +7,10 @@ It is inspired by the [basic example at Azure Samples](https://github.com/Azure-
 
 To run this on your local machine you will need.
 
-OS: Ubuntu 17.04 or greater
-Zookeeper
-Kafka
-Schema Registery
+.OS: Ubuntu 17.04 or greater
+.Zookeeper
+.Kafka
+.Schema Registery
 
 To run this on Azure clusters:
 
