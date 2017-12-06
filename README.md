@@ -5,6 +5,15 @@ It is inspired by the [basic example at Azure Samples](https://github.com/Azure-
 
 ## Understand this example
 
+To run this on your local machine you will need.
+
+OS: Ubuntu 17.04 or greater
+Zookeeper
+Kafka
+Schema Registery
+
+To run this on Azure clusters:
+
 This example uses two Scala applications that you will run on HDInsight 3.5. The code relies on the following components:
 
 * __Two HDInsight clusters__: Apache Kafka and Spark are available as two different cluster types. HDInsight cluster types are tuned for the performance of a specific technology; in this case, Kafka and Spark. To use both together, we will create an Azure Virtual network and then create both a Kafka and Spark cluster on the virtual network.
