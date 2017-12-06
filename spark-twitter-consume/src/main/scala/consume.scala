@@ -87,10 +87,8 @@ class consume {
                 ))
               })
 
-            // Load Naive Bayes Model from the location specified in the config file.
-            val model_path = "../NBModel"
+
             val stopword_path = "NLTK_English_Stopwords_Corpus.txt"
-            val naiveBayesModel = NaiveBayesModel.load(ssc.sparkContext, model_path)
             val stopWordsList = ssc.sparkContext.broadcast(StopwordsLoader.loadStopWords(stopword_path))
 
             val simpleDateFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss ZZ yyyy")
@@ -121,12 +119,10 @@ class consume {
                  val tweet = row.toSeq.toList
                  val tweetText = tweet(6).asInstanceOf[String]
                  val tweetLang = tweet(2).asInstanceOf[String]
-                 var nbScore = 0
                  var nlpScore = 0
                  val cleanedTweetText = tweetText.replaceAll("\n", "")
-                 nbScore = MLlibSentimentAnalyzer.computeSentiment(cleanedTweetText, stopWordsList, naiveBayesModel)
                  nlpScore = CoreNLPSentimentAnalyzer.computeWeightedSentiment(cleanedTweetText)
-                 Row.fromSeq(tweet ++ List(nbScore,nlpScore))
+                 Row.fromSeq(tweet ++ List(nlpScore))
             })
 
 
@@ -139,7 +135,6 @@ class consume {
                 StructField("Orignaltext", StringType, false) ::
                 StructField("location", StringType, false) ::
                 StructField("Trimmedtext", StringType, false) ::
-                StructField("NB", IntegerType, false) ::
                 StructField("NLP", IntegerType, false) :: Nil)
 
 
@@ -152,13 +147,23 @@ class consume {
 
 
             // Show 5 in the console
-           // val count = tweetInfo.count()
-            //print("\nTWEETS: "+count.toString()+"\n")
-
+            // val count = tweetInfo.count()
+            // print("\nTWEETS: "+count.toString()+"\n")
             //tweetInfo.show(3)
 
 
-          val outputfile = "/home/osboxes/Desktop/lets"
+
+            /*
+           // Append to Parquet
+           tweetInfo
+             .write
+             .partitionBy("year", "month", "day")
+             .mode(SaveMode.Append)
+             .save("/home/osboxes/Desktop/Output/") */
+
+
+            // or alternatively  write your results to a csv file
+          val outputfile = "/home/osboxes/Desktop/results"
           var filename = "myinsights"
           var outputFileName = outputfile + "/temp_" + filename
           var mergedFileName = outputfile + "/merged_" + filename
@@ -174,29 +179,6 @@ class consume {
           merge(mergeFindGlob, mergedFileName)
           tweetInfo.unpersist()
 
-          print("Done!")
-
-
-
-
-
-         /*   if(count > 0) {
-              //Write CSV
-              tweetInfo
-                .write
-                .format("com.databricks.spark.csv")
-                .option("header", "false")
-                .mode(SaveMode.Append)
-                .save("/home/osboxes/Desktop/iphoneX/")
-            }
-
-
-            // Append to Parquet
-            tweetInfo
-              .write
-              .partitionBy("year", "month", "day")
-              .mode(SaveMode.Append)
-              .save("/home/osboxes/Desktop/Output/") */
 
           }
       }
@@ -225,6 +207,7 @@ class consume {
     ssc.start()
 
     // Set the stream to run with a timeout of batchInterval * 60 * 1000 seconds
+    // If you don't set the time it will keep running forever
     //ssc.awaitTerminationOrTimeout(batchInterval * 60 * 1000)
     ssc.awaitTermination()
   }

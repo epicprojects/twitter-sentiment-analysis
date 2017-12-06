@@ -7,10 +7,10 @@ object main {
 
   val searchTerm = "#iPhoneX"
 
-  val consumerKey = "vjJz6aBx942hfvTfn4YIQ7TQ5"
-  val consumerSecret = "APzRR7s5gVOBcX0b5uGDcsKTX1hP5h6hk16JoRKJ8VUuOO0B1q"
-  val accessToken = "1896843572-xTLcq2xxchnvKJViyiRbwpXZFM7Xw37OrkjXPWj"
-  val accessTokenSecret = "diCyqwQL9HqBuuhtGubd3IpvaEMKZyTYL7irmdGt3arZs"
+  val consumerKey = "CONSUMER_KEY"
+  val consumerSecret = "CONSUMER_SECRET"
+  val accessToken = "ACCESS_TOKEN"
+  val accessTokenSecret = "TOKEN_SECRET"
 
   val outputFilePath = "/twitter/tweets.parquet"
   val configFile = new File("../application.properties")
