@@ -1,6 +1,8 @@
 # Twitter sentiment analysis using Avro with Apache Kafka and Apache Spark on HDInsight (or Local)
 
-This is an illustration of streaming Avro data from Kafka on HDInsight to a Spark on HDInsight cluster and then using Stanford Core NLP library to predict sentiment of tweets. Finally exposing the resulting data in Google Data Studio. Try it [here](https://datastudio.google.com/open/1YUeVXkIGJtJU6pCgBgXPzlzkkZka5nSE)
+This is an illustration of streaming Avro data from Kafka on HDInsight to a Spark on HDInsight cluster and then using Stanford Core NLP library to predict sentiment of tweets. Finally exposing the resulting data in Google Data Studio. 
+
+You can see the final results [here.](https://datastudio.google.com/open/1YUeVXkIGJtJU6pCgBgXPzlzkkZka5nSE)
 
 ## Understand this example
 
