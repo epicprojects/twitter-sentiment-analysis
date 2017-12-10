@@ -14,13 +14,13 @@ __To run this on your local machine you will need:__
 * [Twitter4j API](http://twitter4j.org/en/) (Imported by IntelliJ IDEA)
 * Scala
 
-0. Make sure you have kafka on your OS and run provision.sh
-1. Create a twitter app and replace keys and secrets in code.
-2. Start Kafka 
-3. Start Schema Registry (Refer to Run Schema Registry Below)
-4. Use terminal or IDE to build and run scala sbt producers and consumers
+1. Make sure you have kafka on your OS and run provision.sh
+2. Create a twitter app and replace keys and secrets in code.
+3. Start Kafka 
+4. Start Schema Registry (Refer to Run Schema Registry Below)
+5. Use terminal or IDE to build and run scala sbt producers and consumers
 
-- You can look at azure cluster tutorial below for detailed understanding
+- *You can look at azure cluster tutorial below for detailed understanding*
 
 __To run this on Azure clusters:__
 
