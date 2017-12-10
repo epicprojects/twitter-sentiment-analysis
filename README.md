@@ -1,4 +1,4 @@
-# Twitter sentiment analysis using Stanford Core NLP and Avro with Apache Kafka and Apache Spark on HDInsight (or Local)
+# Twitter sentiment analysis using Avro with Apache Kafka and Apache Spark on HDInsight (or Local)
 
 This is an illustration of streaming Avro data from Kafka on HDInsight to a Spark on HDInsight cluster and then using Stanford Core NLP library to predict sentiment of tweets. Finally exposing the resulting data in Google Data Studio. Try it [here](https://datastudio.google.com/open/1YUeVXkIGJtJU6pCgBgXPzlzkkZka5nSE)
 
@@ -38,7 +38,11 @@ This example uses two Scala applications that you will run on HDInsight 3.5. The
 
 * A __Producer application__: The `spark-twitter-produce` standalone application uses Twitter to populate data in Kafka. If you do not have a Twitter app set up, visit [](https://apps.twitter.com) to create one.
 
-* A __Consumer Spark application__: The `spark-twitter-consume` Spark application consumes data from Kafka as streams into Parquet files. We use Kafka DStreams and Spark Streaming.
+* A __Consumer Spark application__: The `spark-twitter-consume` Spark application consumes data from Kafka as streams pre-process the data and using Stanford Core NLP Predicts the sentiments of tweets and write resutls into CSV or Parquet files. We use Kafka DStreams and Spark Streaming.
+
+* __Google Data Studio__: We will consume the data from Spark into a dashboard.
+
+*Also can use*
 
 * __Hive__: We will configure an external table in Hive to expose the Parquet files as a table.
 
