@@ -1,18 +1,28 @@
-# Use Avro with Apache Kafka and Apache Spark on HDInsight
+# Twitter sentiment analysis using Stanford Core NLP and Avro with Apache Kafka and Apache Spark on HDInsight (or Local)
 
-This is a simple example of streaming Avro data from Kafka on HDInsight to a Spark on HDInsight cluster, and exposing the resulting data in Power BI.
-It is inspired by the [basic example at Azure Samples](https://github.com/Azure-Samples/hdinsight-spark-scala-kafka).
+This is an illustration of streaming Avro data from Kafka on HDInsight to a Spark on HDInsight cluster and then using Stanford Core NLP library to predict sentiment of tweets. Finally exposing the resulting data in Google Data Studio.
 
 ## Understand this example
 
-To run this on your local machine you will need.
+__To run this on your local machine you will need:__
 
-.OS: Ubuntu 17.04 or greater
-.Zookeeper
-.Kafka
-.Schema Registery
+* [Ubuntu 17.04 or greater OS](https://www.osboxes.org/ubuntu/)
+* [Kafka](https://www.digitalocean.com/community/tutorials/how-to-install-apache-kafka-on-ubuntu-14-04)
+* [Confluent Schema Registry](https://www.confluent.io/) (Installed by provision.sh)
+* [Spark](https://spark.apache.org/) (Imported by IntelliJ IDEA)
+* [Stanford Core NLP](https://stanfordnlp.github.io/CoreNLP/) (Imported by IntelliJ IDEA)
+* [Twitter4j API](http://twitter4j.org/en/) (Imported by IntelliJ IDEA)
+* Scala
 
-To run this on Azure clusters:
+0. Make sure you have kafka on your OS and run provision.sh
+1. Create a twitter app and replace keys and secrets in code.
+2. Start Kafka 
+3. Start Schema Registry (Refer to Run Schema Registry Below)
+4. Use terminal or IDE to build and run scala sbt producers and consumers
+
+- You can look at azure cluster tutorial below for detailed understanding
+
+__To run this on Azure clusters:__
 
 This example uses two Scala applications that you will run on HDInsight 3.5. The code relies on the following components:
 
@@ -53,7 +63,7 @@ Navigate to your [HDInsight clusters](https://portal.azure.com/#blade/HubsExtens
 
 On the Spark cluster, clone the project and install the required tooling (SBT and Schema Registry):
 ```bash
-git clone https://github.com/algattik/hdinsight-kafka-spark
+git clone https://github.com/epicprojects/twitter-sentiment-analysis
 cd hdinsight-kafka-spark
 ./provision.sh
 ```
@@ -112,7 +122,7 @@ In parallel, open a second SSH shell to the Spark server.
 Compile and run the Producer program.
 
 **NB**:
-The first time, the program will fail with an error message but will create a default configuration file ../application.properties for you to edit.
+The first time, the program might fail with an error message but will create a default configuration file ../application.properties for you to edit.
 
 ```bash
 cd hdinsight-kafka-spark
@@ -141,32 +151,8 @@ Run the following command, replacing KAFKA_BROKER with your Kafka broker endpoin
 kafka-console-consumer --bootstrap-server KAFKA_BROKER --topic tweets --from-beginning | xxd | head -20
 ```
 
-You should see output similar to the following. The xxd command shows the hex content of the stream, and the content in ASCII on the right (replaced by `.' for non-printable characters).
+You should see output in hex format. The xxd command shows the hex content of the stream, and the content in ASCII on the right (replaced by `.' for non-printable characters).
 
-```text
-00000000: 0000 0000 1582 c0ba 919e b098 8a19 8095  ................
-00000010: 80d5 c757 0466 7200 9202 5254 2040 5947  ...W.fr...RT @YG
-00000020: 4b65 7265 3a20 566f 7573 2c20 6c65 7320  Kere: Vous, les 
-00000030: 6c69 7665 732c 2023 4761 6d65 4f66 5468  lives, #GameOfTh
-00000040: 726f 6e65 732c 206c 6573 2072 6563 6f72  rones, les recor
-00000050: 6473 2e2e 2e20 556e 20c3 a974 c3a9 2074  ds... Un ..t.. t
-00000060: 72c3 a873 2063 6f6d 706c 6971 75c3 a920  r..s compliqu.. 
-00000070: 706f 7572 2040 4772 6567 5f69 735f 4269  pour @Greg_is_Bi
-00000080: 6742 2065 7420 6d6f 692c 206d 6169 7320  gB et moi, mais 
-00000090: 7175 656c 20c3 a974 c3a9 2070 6f75 72e2  quel ..t.. pour.
-000000a0: 80a6 2020 426f 7264 6561 7578 2c20 4672  ..  Bordeaux, Fr
-000000b0: 616e 6365 0a00 0000 0015 8880 bdb1 a9b0  ance............
-000000c0: 988a 1980 9580 d5c7 5704 746c 00e8 0152  ........W.tl...R
-000000d0: 5420 4039 4741 473a 204e 6120 6e61 206e  T @9GAG: Na na n
-000000e0: 6120 6e61 206e 6120 6e61 206e 6120 6e61  a na na na na na
-000000f0: 2061 2067 6972 6c20 6861 7320 6e6f 206e   a girl has no n
-00000100: 616d 652e 2023 6761 6d65 6f66 7468 726f  ame. #gameofthro
-00000110: 6e65 730a 6874 7470 733a 2f2f 742e 636f  nes.https://t.co
-00000120: 2f6f 6a68 5464 6f6d 7967 7020 6874 7470  /ojhTdomygp http
-00000130: 733a 2f2f 742e 636f 2f65 395a 315a 4777  s://t.co/e9Z1ZGw
-Unable to write to standard out, closing consumer.
-Processed a total of 73 messages
-```
 
 ### Run the Consumer program to stream tweets from Kafka to Spark
 
@@ -205,6 +191,10 @@ drwxr-xr-x   - sshuser supergroup          0 2017-08-31 22:30 /twitter/tweets.pa
 -rw-r--r--   1 sshuser supergroup       2029 2017-08-31 22:30 /twitter/tweets.parquet/year=2017/month=8/day=31/part-r-00000-17c74d4a-e48f-46e3-8278-f0b9f0d1d887.snappy.parquet
 -rw-r--r--   1 sshuser supergroup       1795 2017-08-31 22:29 /twitter/tweets.parquet/year=2017/month=8/day=31/part-r-00000-20ae45d5-2f24-4da4-8c42-20e0488d7ecc.snappy.parquet
 ```
+### Export Spark data to CSV
+
+You can also export your output to a CSV File and then later use that file to process it or create a report from it.
+
 
 ### Expose Spark data from Hive
 
@@ -237,15 +227,13 @@ SELECT * FROM tweets LIMIT 5;
 
 You should see a sample of the Tweet data.
 
-![Hive Query Result](media/hive-query-output.png)
+### Consume data in Google Data Studio
 
-### Consume data in Power BI
-
-Open Power BI Desktop. Select **Get Data**, then **Azure HDInsight Spark**. Enter your Spark server (CLUSTERNAME.azurehdinsight.net) and your admin credentials.
+Open Google data studio and import the CSV output file to create a report. Alternatively you can also use Microsoft Power BI to hook your hive cluster data to Power BI by opening Power BI Desktop Application and Select **Get Data**, then **Azure HDInsight Spark**. Enter your Spark server (CLUSTERNAME.azurehdinsight.net) and your admin credentials.
 
 You can now design and publish a dashboard from your data.
 
-![Power BI Dashboard](media/powerbi.png)
+![Google Data Studio Dashboard](media/dashboard.png)
 
 ## Inspect the code
 
